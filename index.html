@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Objectif 65kg - Foot & Fit</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4CAF50">
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #121212;
+      color: white;
+      padding: 15px;
+      margin: 0;
+    }
+    .container {
+      max-width: 500px;
+      margin: auto;
+    }
+    h1 {
+      color: #4CAF50;
+      text-align: center;
+      font-size: 1.5rem;
+    }
+
+    .timer-box {
+      background: #2c2c2c;
+      padding: 15px;
+      border-radius: 15px;
+      text-align: center;
+      margin-bottom: 20px;
+      border: 2px solid #4CAF50;
+    }
+    #timerDisplay {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin: 10px 0;
+      font-family: monospace;
+    }
+
+    .btn {
+      padding: 10px 15px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      margin: 5px;
+    }
+    .btn-start {
+      background: #4CAF50;
+      color: white;
+    }
+    .btn-reset {
+      background: #f44336;
+      color: white;
+    }
+
+    .card {
+      background: #1e1e1e;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 12px;
+      border-left: 5px solid #4CAF50;
+    }
+    .day {
+      font-weight: bold;
+      color: #888;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+    }
+    .exercise {
+      margin: 10px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #333;
+      padding-bottom: 5px;
+    }
+
+    .nutri-card {
+      background: #263238;
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 20px;
+      border-left: 5px solid #FFC107;
+    }
+    .nutri-title {
+      color: #FFC107;
+      font-weight: bold;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    ul {
+      padding-left: 20px;
+      margin: 5px 0;
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+
+    input[type="checkbox"] {
+      transform: scale(1.5);
+      accent-color: #4CAF50;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>🏆 Objectif 65kg</h1>
+
+    <div class="timer-box">
+      <div id="timerDisplay">00:45</div>
+      <button class="btn btn-start" onclick="toggleTimer()" id="startBtn">
+        LANCER REPOS
+      </button>
+      <button class="btn btn-reset" onclick="resetTimer()">RESET</button>
+    </div>
+
+    <div class="card">
+      <div class="day">Lundi - Renforcement A</div>
+      <div class="exercise"><span>Squats Explosifs (5x15)</span><input type="checkbox"></div>
+      <div class="exercise"><span>Pompes (Max)</span><input type="checkbox"></div>
+      <div class="exercise"><span>Fentes Marchées (20)</span><input type="checkbox"></div>
+      <div class="exercise"><span>Gainage (1 min)</span><input type="checkbox"></div>
+    </div>
+
+    <div class="card" style="border-left-color:#2196F3">
+      <div class="day">Mardi - Football</div>
+      <p style="font-size:0.9rem">
+        Entraînement club ⚽<br>
+        <i>Hydratation + glucides le midi</i>
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="day">Mercredi - Renforcement B</div>
+      <div class="exercise"><span>Pompes larges (4x15)</span><input type="checkbox"></div>
+      <div class="exercise"><span>Chaise (3x45s)</span><input type="checkbox"></div>
+      <div class="exercise"><span>Burpees (3x10)</span><input type="checkbox"></div>
+    </div>
+
+    <div class="nutri-card">
+      <span class="nutri-title">🍎 Guide Nutrition</span>
+      <ul>
+        <li>Jours foot : pâtes ou riz + poulet</li>
+        <li>Banane avant l’effort</li>
+        <li>Soir : légumes + poisson</li>
+        <li>Jours off : repas léger, pas de sodas</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    let timer;
+    let seconds = 45;
+    let isRunning = false;
+
+    function displayTime() {
+      let m = Math.floor(seconds / 60);
+      let s = seconds % 60;
+      document.getElementById("timerDisplay").innerText =
+        (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
+    }
+
+    function toggleTimer() {
+      if (isRunning) {
+        clearInterval(timer);
+        document.getElementById("startBtn").innerText = "REPRENDRE";
+      } else {
+        timer = setInterval(() => {
+          if (seconds > 0) {
+            seconds--;
+            displayTime();
+          } else {
+            clearInterval(timer);
+            alert("Repos terminé ! 💪");
+            resetTimer();
+          }
+        }, 1000);
+        document.getElementById("startBtn").innerText = "PAUSE";
+      }
+      isRunning = !isRunning;
+    }
+
+    function resetTimer() {
+      clearInterval(timer);
+      seconds = 45;
+      isRunning = false;
+      displayTime();
+      document.getElementById("startBtn").innerText = "LANCER REPOS";
+    }
+
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("sw.js");
+    }
+  </script>
+</body>
+</html>
